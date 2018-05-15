@@ -1,6 +1,9 @@
 'use strict'
 import React, { Component } from 'react';
 import ShopItemView from '../View/ShopItemView.js';
+import ZTShopPch from '../../ZTShopPch.js';
+import Swiper from 'react-native-swiper';
+
 import {
   Platform,
   View,
@@ -8,10 +11,9 @@ import {
   TouchableHighlight,
   FlatList,
   Image,
-  Dimensions
+  Dimensions,
+  TouchableOpacity
 } from 'react-native';
-
-var getUrl = "http://192.168.1.123:3000/api/goods?page=1&pageSize=20";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -20,11 +22,28 @@ export default class Shop extends Component {
     super(props);
   
     this.state = {
-      datas: []
+      datas: [],
+      indexPathSelected: 0
     };
   }
   static navigationOptions = {
     title: '首页'
+  }
+
+  _renderLeftItem = (item) => {
+
+    return(
+      <TouchableOpacity 
+        onPress = { () => {
+          this.setState({
+            indexPathSelected: item.index
+          })
+        }}>
+        <View style = {{ height: scaleSizeToFit(50), width: screenWidth / 5, backgroundColor: this.state.indexPathSelected === item.index ? 'white' : 'rgba(200, 199, 204, 1)', justifyContent: 'center'}}>
+          <Text style = {{ fontSize: 14, textAlign: 'center' }} numberOfLines = {1}>{item.item}</Text>
+        </View>
+      </TouchableOpacity>
+    )
   }
 
   _renderItem = (info) => {
@@ -34,12 +53,12 @@ export default class Shop extends Component {
       <TouchableHighlight
         underlayColor = 'gray'
         onPress = { () => this.props.navigation.navigate('GoodsDetail', {model: item})}>
-      <View style = {{flexDirection: 'row'}}>
-          <View >
-            <Image source = {{ uri: item.coverPics[1] }} style = {{ height: scaleSizeToFit(120), width: scaleSizeToFit(120),  marginBottom: 5 }}/>
+      <View style = {{flexDirection: 'row', paddingLeft: scaleSizeToFit(10)}}>
+          <View style = {{justifyContent: 'center' }}>
+            <Image source = {{ uri: item.coverPics[1] }} style = {{ height: scaleSizeToFit(80), width: scaleSizeToFit(80),  marginBottom: 5 }}/>
           </View>
-          <View>
-            <Text numberOfLines = {2} style={{ width: screenWidth - scaleSizeToFit(120), lineHeight: scaleSizeToFit(24), fontSize: scaleSizeToFit(17), paddingLeft: scaleSizeToFit(16), paddingTop: 5, paddingRight: scaleSizeToFit(10), color: 'black'}} >
+          <View style = {{ width: screenWidth * 4 / 5 }}>
+            <Text numberOfLines = {2} style={{ width: screenWidth * 4 / 5 - scaleSizeToFit(80), lineHeight: scaleSizeToFit(24), fontSize: scaleSizeToFit(16), paddingLeft: scaleSizeToFit(16), paddingTop: 5, paddingRight: scaleSizeToFit(10), color: 'black'}} >
               {item.title}
             </Text>
             <Text style = {{ fontSize: 12, color: 'gray', marginTop: 5, marginLeft: 16 }}>运费: {item.yunfei}</Text>
@@ -50,31 +69,41 @@ export default class Shop extends Component {
     )
   }
   _separator = () => {
-    return <View style={{ width: screenWidth - scaleSizeToFit(120), marginLeft: scaleSizeToFit(120), height:1, backgroundColor:'rgba(200, 199, 204, 1)'}}/>;
+    return <View style={{ width: screenWidth * 4 / 5 - scaleSizeToFit(10), marginLeft: screenWidth / 5 + scaleSizeToFit(10), height:1, backgroundColor:'rgba(200, 199, 204, 1)'}}/>;
   }
   fetchData() {
-    fetch(getUrl,'GET')
-    .then((response) => {  
-        return response.json();  
-    })  
-    .then((responseText) => {  
-        this.setState({
-          datas: responseText.data
-        })
-    })  
-    .catch((error) => {  
-      alert('error: ' + error)  
+    
+    let url = ZTShopPch.ZTNetWorkConfig.SERVER_HOST + ZTShopPch.ZTNetWorkConfig.API_GOODSLIST_URL;
+
+    let params = {
+      'page': 1,
+      'pageSize': 20
+    }
+    
+    ZTShopPch.ZTNetWorkRequest.get(url, params, (response) => {
+      
+      
+      this.setState({
+        datas: response.data
+      })
     })
   }
   componentDidMount() {
+
     this.fetchData();
   }
   
   render() {
     
     return(
-      <View style = {{flex: 1, backgroundColor: 'white'}}>
-         <FlatList
+      <View style = {{flex: 1, backgroundColor: 'white', flexDirection: 'row'}}>
+        <FlatList 
+        style = {{ width: screenWidth / 5 }}
+        data = {['全部', 'Nike/耐克', 'adiddas/阿迪达斯']}
+        renderItem = {this._renderLeftItem}
+        ItemSeparatorComponent = {this._separator}/>
+        <FlatList
+          style = {{ width: screenWidth * 4 / 5 }}
           data = {this.state.datas}//{this.state.datas}
           renderItem = { this._renderItem }
           ListHeaderComponent={this._headerView}

@@ -5,6 +5,10 @@
  */
 
 import React, { Component } from 'react';
+
+import Login from './App/Components/Login/ZTLoginVc.js'
+
+import Home from './App/Components/Shop/ViewController/HomeVc.js'
 import Shop from './App/Components/Shop/ViewController/ShopVc.js'
 import GoodsDetail from './App/Components/Shop/ViewController/GoodsDetailVc.js'
 import CommentList from './App/Components/Shop/ViewController/CommentListVc.js'
@@ -13,10 +17,11 @@ import MakeOrder from './App/Components/Shop/ViewController/MakeOrderVc.js'
 import Cart from './App/Components/Cart/ViewController/Cart.js'
 import Show from './App/Components/Show/ViewController/Show.js'
 
-import Mine from './App/Components/Mine/ViewController/Mine.js'
+import Mine from './App/Components/Mine/ViewController/MineVc.js'
 import UserInfo from './App/Components/Mine/ViewController/UserInfoVc.js'
 import UserAddress from './App/Components/Mine/ViewController/UserAddressVc.js'
 import EditAddress from './App/Components/Mine/ViewController/EditAddressVc.js'
+import OrderManageVc from './App/Components/Mine/ViewController/OrderManageVc.js';
 
 import {
   AppRegistry,
@@ -48,8 +53,8 @@ export default class App extends Component<Props> {
 }
 
 const MainScreenNavigator = TabNavigator({
-  Shop: {
-    screen: Shop,
+  Home: {
+    screen: Home,
     navigationOptions: {
       tabBarLabel: '首页',
       tabbarIcon: ({tintColor}) => (
@@ -110,12 +115,12 @@ const MainScreenNavigator = TabNavigator({
 })
 
 const MainWindow  = StackNavigator({
-  // Login: {
-  //   screen: Login,
-  //   navigationOptions: {
-  //     headerTitle: '登录'
-  //   }
-  // },
+  Login: {
+    screen: Login,
+    navigationOptions: {
+      headerTitle: '登录'
+    }
+  },
   // Register: {
   //   screen: Register,
   //   navigationOptions: {
@@ -124,6 +129,9 @@ const MainWindow  = StackNavigator({
   // },
   Home: {
     screen: MainScreenNavigator,
+  },
+  Shop: {
+    screen: Shop
   },
   GoodsDetail: {
     screen: GoodsDetail
@@ -142,6 +150,9 @@ const MainWindow  = StackNavigator({
   },
   EditAddress: {
     screen: EditAddress
+  },
+  OrderManageVc: {
+    screen: OrderManageVc
   }
   
 },{

@@ -14,6 +14,29 @@ import {
 
 const screenWidth = Dimensions.get('window').width;
 
+const titleArr = [
+                    {
+                      'title': '待付款',
+                      'icon': require('../../../Assets/mine/obligation.png')
+                    },
+                    {
+                      'title': '待发货',
+                      'icon': require('../../../Assets/mine/daifahuo.png')
+                    },
+                    {
+                      'title': '待收货',
+                      'icon': require('../../../Assets/mine/daishouhuo.png')
+                    },
+                    {
+                      'title': '待评价',
+                      'icon': require('../../../Assets/mine/daipingjia.png')
+                    },
+                    {
+                      'title': '退款/售后',
+                      'icon': require('../../../Assets/mine/tuikuan.png')
+                    },
+                  ]
+
 export default class Mine extends Component {
   static navigationOptions = {
     title: '我的'
@@ -30,29 +53,24 @@ export default class Mine extends Component {
             <Text style = {{ fontSize: 16 }}>点击登录</Text>
         </View>
         </TouchableOpacity>
-
-        <View style = {{ flexDirection: 'row', marginTop: 30 }}>
-          <View style = {{ width: screenWidth / 5, alignItems: 'center' }}>
-            <Image style = {{ width: 36, height: 36 }} source = { require('../../../Assets/mine/obligation.png') } />
-            <Text style = {{ marginTop: 10 }}>待付款</Text>
-          </View>
-          <View style = {{ width: screenWidth / 5, alignItems: 'center' }}>
-            <Image style = {{ width: 36, height: 36 }} source = { require('../../../Assets/mine/daifahuo.png') } />
-            <Text style = {{ marginTop: 10 }}>待发货</Text>
-          </View>
-          <View style = {{ width: screenWidth / 5, alignItems: 'center' }}>
-            <Image style = {{ width: 36, height: 36 }} source = { require('../../../Assets/mine/daishouhuo.png') } />
-            <Text style = {{ marginTop: 10 }}>待收货</Text>
-          </View>
-          <View style = {{ width: screenWidth / 5, alignItems: 'center' }}>
-            <Image style = {{ width: 36, height: 36 }} source = { require('../../../Assets/mine/daipingjia.png') } />
-            <Text style = {{ marginTop: 10 }}>待评价</Text>
-          </View>
-          <View style = {{ width: screenWidth / 5, alignItems: 'center' }}>
-            <Image style = {{ width: 36, height: 36 }} source = { require('../../../Assets/mine/tuikuan.png') } />
-            <Text style = {{ marginTop: 10 }}>退款/售后</Text>
-          </View>
+        <View style = {{ flexDirection: 'row', marginTop: 10 }}>
+          {
+            titleArr.map( (item, i) => {
+              return(
+                <TouchableOpacity
+                  onPress = { () => {
+                    this.props.navigation.navigate('OrderManageVc', {index: i})
+                  }}>
+                  <View style = {{ width: screenWidth / 5, alignItems: 'center' }}>
+                    <Image style = {{ width: 36, height: 36 }} source = {item.icon} />
+                    <Text style = {{ marginTop: 10 }}>{item.title}</Text>
+                  </View>
+                </TouchableOpacity>
+              )
+            })
+          }
         </View>
+
         <View style = {{ backgroundColor: 'rgba(200, 199, 204, 1)', height: 0.5, width: screenWidth, marginTop: 10 }}></View>
       </View>
       

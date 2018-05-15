@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import SwipeOut from 'react-native-swipeout'
 
+import ZTShopPch from '../../ZTShopPch.js';
+
 import {
   Platform,
   // AppRegistery,
@@ -12,8 +14,6 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-
-const url = "http://192.168.1.123:3000/api/cart/list?_user=5a4b3abd97f0f42f26372ddf"
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -163,21 +163,20 @@ export default class Cart extends Component {
     this.props.navigation.navigate('MakeOrder', {option: this.state.selectOption})
   }
   fetchData() {
-    fetch(url,'GET')
-    .then((response) => {  
-        return response.json(); 
-    })  
-    .then((responseText) => {  
-        for (var i = 0; i < responseText.data.length; i++) {
+    let url = ZTShopPch.ZTNetWorkConfig.SERVER_HOST + ZTShopPch.ZTNetWorkConfig.API_SHOPPINGLIST_URL;
+
+    let params = {
+      _user: '5a4b3abd97f0f42f26372ddf'
+    }
+    
+    ZTShopPch.ZTNetWorkRequest.get(url, params, (response) => {
+      for (var i = 0; i < response.data.length; i++) {
           this.state.itemIsSelected.push(false);
         };
         this.setState({
-          datas: responseText.data,
+          datas: response.data,
           itemIsSelected: this.state.itemIsSelected
         })
-    })  
-    .catch((error) => {  
-      alert('error: ' + error)  
     })
   }
   componentDidMount() {

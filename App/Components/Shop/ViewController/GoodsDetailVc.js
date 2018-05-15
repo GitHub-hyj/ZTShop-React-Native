@@ -7,6 +7,7 @@ import Swiper from 'react-native-swiper';
 import Styles from '../../../Styles/Shop';
 import GoodsDetailFooterView from '../View/GoodsDetailFooterView.js'
 import ChooseView from '../View/ChooseView.js'
+import ZTShopPch from '../../ZTShopPch.js';
 
 import {
   Platform,
@@ -22,8 +23,6 @@ import {
   TouchableHighlight,
   TextInput
 } from 'react-native';
-
-const commentUrl = "http://192.168.1.123:3000/api/goodscomment/list?_goods=5a4aeecde743e6036eb3d2ad";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -112,7 +111,7 @@ export default class GoodsDetail extends Component {
           onPress = {this._pushToCommentList}>
             <View style = {{ backgroundColor: 'white'}}>
               <View style = {{ flexDirection: 'row', alignItems: 'center', marginLeft: 10, marginTop: 5}} >
-                <Image source = {{ uri: 'http://192.168.1.123:3000/' + comment._user.portrait }} style = {{ width: 30, height: 30 , borderRadius: 15}}/>
+                <Image source = {{ uri: ZTShopPch.ZTNetWorkConfig.SERVER_HOST+ '/' + comment._user.portrait }} style = {{ width: 30, height: 30 , borderRadius: 15}}/>
                 <Text style = {{ marginLeft: 10 }} >
                   {comment._user.nickname}
                 </Text>
@@ -156,7 +155,7 @@ export default class GoodsDetail extends Component {
                 autoplayTimeout = {1}
                 paginationStyle = {{bottom: 10}}
                 showsPagination={true}
-                dot = { <View style = {{ width: 10, height: 2, backgroundColor: 'gray', marginRight: 3, marginLeft: 0}} /> }
+                dot = { <View style = {{ width: 10, height: 2, marginRight: 3, marginLeft: 0}} /> }
                 >
         {
           GoodsModel.coverPics.map((item, i) => this._renderItemImage(item, i))
@@ -234,7 +233,6 @@ export default class GoodsDetail extends Component {
     }
   }
   render() {
-    
     return(
       <View style = {Styles.container}>
         <SectionList 
@@ -251,18 +249,18 @@ export default class GoodsDetail extends Component {
       </View>
     )
   }
+  //获取评论
   fetchData() {
-    fetch(commentUrl,'GET')
-    .then((response) => {  
-        return response.json(); 
-    })  
-    .then((responseText) => {  
-        this.setState({
-          commentList: responseText.data
-        })
-    })  
-    .catch((error) => {  
-      alert('error: ' + error)  
+    let url = ZTShopPch.ZTNetWorkConfig.SERVER_HOST + ZTShopPch.ZTNetWorkConfig.API_GOODSCOMMENTLIST_URL;
+
+    let params = {
+      '_goods': this.props.navigation.state.params.model._id
+    }
+    
+    ZTShopPch.ZTNetWorkRequest.get(url, params, (response) => {
+      this.setState({
+        commentList: response.data
+      })
     })
   }
   componentDidMount() {

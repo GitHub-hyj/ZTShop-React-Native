@@ -1318,7 +1318,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.company.testPP;
+				PRODUCT_BUNDLE_IDENTIFIER = com.company;
 				PRODUCT_NAME = ZTShopRN;
 				PROVISIONING_PROFILE = "9c6c8fa0-a346-43f0-a7d5-25bf51ac9921";
 				PROVISIONING_PROFILE_SPECIFIER = porject_test_dev;
@@ -1346,7 +1346,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.company.testPP;
+				PRODUCT_BUNDLE_IDENTIFIER = com.company;
 				PRODUCT_NAME = ZTShopRN;
 				PROVISIONING_PROFILE = "9c6c8fa0-a346-43f0-a7d5-25bf51ac9921";
 				PROVISIONING_PROFILE_SPECIFIER = porject_test_dev;

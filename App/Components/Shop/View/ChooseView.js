@@ -4,6 +4,8 @@ import React, {Component} from 'react';
 import Modal from 'react-native-modalbox';
 import Button from 'react-native-button';
 
+import ZTShopPch from '../../ZTShopPch.js';
+
 import {
   View,
   Image,
@@ -14,8 +16,6 @@ import {
 } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
-
-const sizeUrl = "http://192.168.1.123:3000/api/goods/size?goodsId=5a4aeecde743e6036eb3d2ad"
 
 var dic = {};
 var sizeData = {
@@ -338,17 +338,16 @@ export default class ChooseView extends Component{
     )
   }
    fetchSizeData() {
-    fetch(sizeUrl,'GET')
-    .then((response) => {  
-        return response.json(); 
-    })  
-    .then((responseText) => {  
-        this.setState({
-          datasArr: responseText.data,
-        })
-    })  
-    .catch((error) => {  
-      alert('error: ' + error)  
+    let url = ZTShopPch.ZTNetWorkConfig.SERVER_HOST + ZTShopPch.ZTNetWorkConfig.API_GOODSSIZE_URL;
+
+    let params = {
+      goodsId: this.props.goodsModel._id
+    }
+    
+    ZTShopPch.ZTNetWorkRequest.get(url, params, (response) => {
+      this.setState({
+        datasArr: response.data
+      })
     })
   }
   componentDidMount() {
